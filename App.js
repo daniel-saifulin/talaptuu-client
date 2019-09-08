@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import MainForm from './components/MainForm'
+import MainForm from './src/components/MainForm'
 
 const App = () => {
   return (

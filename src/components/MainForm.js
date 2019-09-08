@@ -4,13 +4,30 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
   View
 } from 'react-native'
+import backend from '../apis/backend'
 
 class MainForm extends React.Component {
-  state = { spent: '' }
+  state = { spent: '', loading: false }
 
-  saveAction = () => console.log(this.state.spent)
+  saveAction = () => {
+    this.setState({ loading: true })
+
+    backend.post('spending', {
+      params: {
+        spend: this.state.spent,
+        date: new Date()
+      }
+    }).then((response) => {
+      this.setState({ loading: false })
+    }).catch((error) => {
+      this.setState({ loading: false })
+    }).finally(function () {
+      this.setState({ loading: false })
+    })
+  }
   onInputChange = text => this.setState({ spent: text })
 
   render() {
@@ -26,7 +43,7 @@ class MainForm extends React.Component {
           underlineColorAndroid={'transparent'}
         />
 
-        <TouchableOpacity
+        <TouchableOpacity disabled={this.state.loading}
           onPress={this.saveAction}
           style={styles.button}>
           <Text style={styles.btnText}>Сохранить</Text>
